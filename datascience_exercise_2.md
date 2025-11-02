@@ -74,9 +74,7 @@ Jupyter Labを開いたらconda_pytorch_p310を選んでノートブックを作
 以下はノートブックを作成しながら演習を行います。
 以下のようにコードをコピーペーストして、▶ボタンを押すか、Ctrl+Enter でコードを実行できます。
 
-<kbd><img width="668" height="167" alt="image" src="https://github.com/user-attachments/assets/76571829-c203-4f07-a2a9-ab5a4a379a94" /></kbd>
-
-まずは以下のコードを貼り付けて実行し、生成 AI モデルをダウンロードして利用できるようにします
+まずは以下のコードを貼り付けて実行し、生成 AI モデルをダウンロードして利用できるようにします。
 [Hugging Face](https://huggingface.co/)では様々なオープンソースのモデルが公開されており、transformers ライブラリから簡単にアクセスすることができます。
 
 ```
@@ -215,3 +213,32 @@ print("Qwen3の回答:")
 print(answer)
 ```
 
+#### ベクトル検索
+
+まず以下のコードを実行して、埋め込みモデルを利用するための `sentence-tranformers` をインストールします。
+
+```
+!pip install -q sentence-transformers
+```
+
+次に埋め込みモデルとして多言語に対応した`intfloat/multilingual-e5-small`を利用します。
+
+```python
+from sentence_transformers import SentenceTransformer
+encoder = SentenceTransformer("intfloat/multilingual-e5-small")
+```
+
+今回は似通った5つの例文を用意し、ベクトル化 (`encoder.encode`)します。
+あとでクエリを変えて、これらの例文との類似度がどう変わるかみてみます。
+```python
+contexts = [
+    "京都の嵐山は11月が紅葉の見頃で、特に渡月橋周辺が人気です。",
+    "東京の高尾山は紅葉が美しく、ケーブルカーで手軽に楽しめます。",
+    "奈良の吉野山は桜で有名ですが、秋の紅葉も素晴らしいです。",
+    "北海道の定山渓は温泉と紅葉の組み合わせが魅力で、10月が見頃です。",
+    "京都の東福寺は紅葉の名所で、通天橋からの眺めが絶景です。"
+]
+
+context_embeddings = encoder.encode(contexts, normalize_embeddings=True)  # 正規化でコサイン類似度が簡単
+print("5つのコンテキストを埋め込み完了！")
+```
