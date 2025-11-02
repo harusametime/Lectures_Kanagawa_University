@@ -78,8 +78,10 @@ Jupyter Labを開いたらconda_pytorch_p310を選んでノートブックを作
 [Hugging Face](https://huggingface.co/)では様々なオープンソースのモデルが公開されており、transformers ライブラリから簡単にアクセスすることができます。
 
 ```
-!pip install transformers==4.51.0 accelerate
+!pip install -q transformers==4.51.0 accelerate
+!pip install -q "huggingface-hub>=0.30.0,<1.0" --force-reinstall
 ```
+
 
 #### 生成 AI モデルのロード
 
