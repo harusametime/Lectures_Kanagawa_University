@@ -2,8 +2,7 @@
 
 本コンテンツは神奈川大学 情報学部 実践的データサイエンス演習受講生向けに作られたページです。
 
-本講義は AWS の学習環境 [AWS Academy](https://aws.amazon.com/jp/training/awsacademy/) を使ってクラウドの基本を演習を通して学ぶことを目的としています。情報学部の学生の多くが、ウェブサイトの作成と公開を初期段階で学ぶことから、それに沿った形で、AWS Academy の追加コンテンツとして独自に作成しています。 コンテンツに関する問い合わせは AWS Academy ではなく github の issue にて報告をお願いします。
-
+本講義は AWS の学習環境 [AWS Academy](https://aws.amazon.com/jp/training/awsacademy/) を使って自然言語処理の基本を演習を通して学ぶことを目的としており、AWS Academy の追加コンテンツとして独自に作成しています。 コンテンツに関する問い合わせは AWS Academy ではなく github の issue にて報告をお願いします。
 ## 演習の概要
 
 Python を使った情報検索の基本的な方法を学習します。Amazon SageMaker AI の Notebooks という機能を利用して Jupyter Lab 上で演習を行います。
