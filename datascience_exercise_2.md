@@ -105,7 +105,7 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 ```
 
-#### RAG 用途に呼び出しの関数を定義
+#### RAG のための関数を定義
 
 生成 AI モデルは、ユーザからの質問に自然に回答できないことが一般的で、ユーザからの質問に加えて、様々な指示を行う必要があります。
 例えば
@@ -118,6 +118,7 @@ model = AutoModelForCausalLM.from_pretrained(
 
 今回の演習では、RAG を行うための指示を含んだ関数を以下のように定義、準備しています。
 このコードブロックを実行して、以降、この関数を使ってモデルを利用できるようにします。
+context に検索結果、question に質問が入ることを想定した関数です。
 
 ```python
 def rag_qwen3(context: str, question: str, max_tokens: int = 256) -> str:
@@ -161,7 +162,7 @@ def rag_qwen3(context: str, question: str, max_tokens: int = 256) -> str:
             **inputs,
             max_new_tokens=max_tokens,
             do_sample=True,
-            temperature=0.3,           # RAGは正確性重視 → 低め
+            temperature=0.3,           
             top_p=0.9,
             repetition_penalty=1.1,
             pad_token_id=tokenizer.eos_token_id
@@ -173,97 +174,44 @@ def rag_qwen3(context: str, question: str, max_tokens: int = 256) -> str:
     return answer
 ```
 
-表示するとわかりますが各行の text という列にテキストデータが入っています。ある行 i のテキストデータは `df.iloc[i]['text']`でアクセス可能です。
-もしキーワードが入っているか調べたい場合は `"キーワード" in df.iloc[i]['text']`で調べます。入っていれば True となります。
-では、
+#### RAG のための関数をテスト
 
-#### 単純なキーワード一致検索
+それでは仮に以下のコンテクスト(検索結果)が得られたとして
+```text
+日本の秋は紅葉の季節として知られています。特に京都の嵐山や永観堂は人気です。
+11月頃に見頃を迎え、赤や黄色の葉が山を染めます。気温は15〜20℃程度で過ごしやすいです。
+秋の味覚にはサンマ、松茸、栗などがあります。
+```
+以下の2種類の質問を試してみましょう。
 
-まずはキーワードの一致で検索してみます。例えば、**京都**というキーワードで検索し、最初の100文字を表示するには以下のような実装ができます（もっと便利な実装はありますが今回は割愛します）
-以下では最初の100ドキュメントだけ検索し、一致箇所の前後10文字を取り出します。
-```python
-offset = 10
-for i in range(100):
-    query = "京都"
-    text = df.iloc[i]["text"]
-    if query in text:
-        print(f"================記事インデックス{i}================")
-        char_index = text.index(query)
-        print(text[char_index-offset:char_index+offset])
-
+```text
+1. 日本の秋の紅葉の見頃と人気スポットは？
+2. 京都に流れている川は?
 ```
 
-いろいろ結果をみてみると、**東京都**と誤って一致しているケースが見受けられます。
-
-#### 形態素解析の導入
-
-形態素解析をして、東京都と京都を見分けられるようにします。以下を実行して形態素解析をインストールして試してみます。
+実行するコードは以下の通りです。
 
 ```python
-!pip install mecab-python3==1.0.10 unidic-lite==1.0.8
+context = """
+日本の秋は紅葉の季節として知られています。特に京都の嵐山や永観堂は人気です。
+11月頃に見頃を迎え、赤や黄色の葉が山を染めます。気温は15〜20℃程度で過ごしやすいです。
+秋の味覚にはサンマ、松茸、栗などがあります。
+"""
 
-# 形態素解析の設定
-import MeCab
-tagger = MeCab.Tagger("-Owakati")
+question = "日本の秋の紅葉の見頃と人気スポットは？"
 
-# 試してみる
-result=tagger.parse("私は京都に住んでいます")
-print(result)
+# RAG実行
+answer = rag_qwen3(context, question)
+print("Qwen3の回答:")
+print(answer)
 ```
 
-形態素の前後にスペースが挿入されていることを確認できます。この`tagger.parse`の処理を先程の検索に入れてみます。結果は変わりましたか？
-
 ```python
-offset = 10
-for i in range(100):
-    query = "京都"
-    text = df.iloc[i]["text"]
-    text = tagger.parse(text) #形態素解析した結果で置き換える
-    if query in text:
-        print(f"================記事インデックス{i}================")
-        char_index = text.index(query)
-        print(text[char_index-offset:char_index+offset])
-````
+question = "京都に流れている川は？"
 
-#### 類似度検索
-
-講義で説明したように BM25 アルゴリズムで類似度検索ができます。まずは以下を実行してライブラリをインストールします。
-
-```python
-!pip install rank_bm25==0.2.2
+# RAG実行
+answer = rag_qwen3(context, question)
+print("Qwen3の回答:")
+print(answer)
 ```
 
-次に以下を実行して、クエリと全文書との類似度を計算し、類似度トップ5の文書を表示します。
-途中の query を変更することができます。クエリにあった内容が表示されることを確認しましょう。
-
-```python
-from rank_bm25 import BM25Okapi
-import MeCab
-import numpy as np
-
-# MeCabで分かち書き
-tagger = MeCab.Tagger("-Owakati")
-tokenized_corpus = [tagger.parse(doc).strip().split() for doc in df["text"]]
-
-# BM25 モデル作成
-bm25 = BM25Okapi(tokenized_corpus)
-
-# クエリを分かち書きしてスコア計算
-query = "東京　音楽"
-tokenized_query = tagger.parse(query).strip().split()
-scores = bm25.get_scores(tokenized_query)
-
-
-# 上位5件のインデックスを取得
-top_n = 5
-top_indices = np.argsort(scores)[::-1][:top_n]
-
-# 結果表示
-print("Top 5 documents:")
-for idx in top_indices:
-    print(f"======== Doc {idx}: Score = {scores[idx]:.4f} =======")
-    print(f"Text = {df.iloc[idx].text[:100]}")
-```
-
-BM25を計算するためには、文書中のすべての単語を調べる必要があります。
-上記コードの `bm25 = BM25Okapi(tokenized_corpus)` は全文書を渡して、単語の頻度などを調べています。
