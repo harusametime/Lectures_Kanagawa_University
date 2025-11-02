@@ -89,6 +89,10 @@ Jupyter Labを開いたらconda_pytorch_p310を選んでノートブックを作
 Qwen3-0.6B は2025年4月にリリースされた最新の軽量大規模言語モデル（LLM）でQwen3シリーズの最小モデルです。
 以下のコードを実行して、 Qwen3-0.6B をロードします。
 
+もしこのセルの実行でエラーが出る場合は、Kernel → Restart Kernel を試してみてください。
+
+
+
 ```python
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
