@@ -150,7 +150,7 @@ def rag_qwen3(context: str, question: str, max_tokens: int = 256) -> str:
         messages,
         tokenize=False,
         add_generation_prompt=True,
-        enable_thinking=True  # 論理的推論を強化（RAGに最適）
+        enable_thinking=True  # RAG のためにenable_thinkingを設定
     )
 
     inputs = tokenizer(text, return_tensors="pt").to(model.device)
@@ -239,7 +239,7 @@ contexts = [
     "京都の東福寺は紅葉の名所で、通天橋からの眺めが絶景です。"
 ]
 
-context_embeddings = encoder.encode(contexts, normalize_embeddings=True)  # 正規化でコサイン類似度が簡単
+context_embeddings = encoder.encode(contexts, normalize_embeddings=True) 
 print("5つのコンテキストを埋め込み完了！")
 ```
 
