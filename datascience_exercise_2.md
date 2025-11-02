@@ -2,7 +2,7 @@
 
 本コンテンツは神奈川大学 情報学部 実践的データサイエンス演習受講生向けに作られたページです。
 
-本講義は AWS の学習環境 [AWS Academy](https://aws.amazon.com/jp/training/awsacademy/) を使ってクラウドの基本を演習を通して学ぶことを目的としています。情報学部の学生の多くが、ウェブサイトの作成と公開を初期段階で学ぶことから、それに沿った形で、AWS Academy の追加コンテンツとして独自に作成しています。 コンテンツに関する問い合わせは AWS Academy ではなく github の issue にて報告をお願いします。
+本講義は AWS の学習環境 [AWS Academy](https://aws.amazon.com/jp/training/awsacademy/) を使って自然言語処理の基本を演習を通して学ぶことを目的としており、AWS Academy の追加コンテンツとして独自に作成しています。 コンテンツに関する問い合わせは AWS Academy ではなく github の issue にて報告をお願いします。
 
 ## 演習の概要
 
@@ -242,3 +242,55 @@ contexts = [
 context_embeddings = encoder.encode(contexts, normalize_embeddings=True)  # 正規化でコサイン類似度が簡単
 print("5つのコンテキストを埋め込み完了！")
 ```
+
+以下のコードを実行して検索用の関数を用意しておきます。`search_similar_contexts("クエリ")`とすれば、クエリとの類似検索をしてくれます。
+
+```python
+
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+def search_similar_contexts(question: str):
+    """
+    質問を受け取り、コンテキストを類似度順にソートして返す
+    """
+    # 質問をembedding
+    query_emb = encoder.encode([question], normalize_embeddings=True)
+    
+    # コサイン類似度計算
+    similarities = cosine_similarity(query_emb, context_embeddings)[0]
+    
+    # 類似度とインデックスをペアにしてソート
+    sorted_indices = np.argsort(similarities)[::-1]  # 降順
+    sorted_scores = similarities[sorted_indices]
+    sorted_contexts = [contexts[i] for i in sorted_indices]
+    
+    # 結果表示
+    print(f"質問: {question}\n")
+    print("類似度順位 | 類似度 | コンテキスト")
+    print("-" * 80)
+    for rank, (score, ctx) in enumerate(zip(sorted_scores, sorted_contexts), 1):
+        print(f" {rank}位        | {score:.4f} | {ctx}")
+    
+    return sorted_contexts, sorted_scores, sorted_indices
+
+```
+
+実際にクエリをいれてみましょう。春も秋も楽しめる山についての例文が一番上にくるか確かめましょう。
+
+```python
+query = "春も秋も楽しめる山はどこ?"
+search_similar_contexts(query)
+```
+
+最後にこの類似検索の結果を生成 AI モデル (Qwen3)に入力して RAG を完成させましょう。
+`search_similar_contexts`の結果を`rag_qwen3`に入力するようにすればOKです。
+
+
+```python
+top_k = 2
+query = "北海道の温泉はどこ"
+retrieved_contexts = search_similar_contexts(query)[0][:top_k]
+rag_qwen3(retrieved_contexts, query)
+```
+
+北海道の温泉に関する情報がでてきました?
