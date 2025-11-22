@@ -13,7 +13,6 @@ Python を使った情報検索の基本的な方法を学習します。Mac OS 
 
 まずは Mac のターミナルを開いてください。cmd+space でterminal と打てば検索できると思います。
 
-
 <kbd><img width="443"  alt="image" src="../images/terminal.png"> </kbd>
 
 まずは演習用のディレクトリを作成します。名前はなんでも構いませんが情報検索 (Information Retrievall; IR) の文字を取って以下のようにしてみます。
@@ -33,7 +32,7 @@ python -m venv .venv
 ```shell
 source .venv/bin/activate
 ```
-pip を最新にして必要なライブラリをいれます。以下をコピペして実行しましょう。
+pip を最新にして必要なライブラリをいれます。以下をコピペして実行しましょう。最後のコマンドは、notebookからこの仮想環境へアクセスできるようにするためのものです。
 ```shell
 pip install --upgrade pip
 pip install \
@@ -49,6 +48,7 @@ pip install \
     jupyter \
     jupyterlab \
     ipykernel
+python -m ipykernel install --user --name=.venv --display-name "Python (.venv)"
 ```
 
 Jupyter Labを実行します。
@@ -58,22 +58,10 @@ jupyter lab
 ```
 ### Jupter Lab での演習
 
-#### 準備
-以下はノートブックを作成しながら演習を行います。
-以下のようにコードをコピーペーストして、▶ボタンを押すか、Ctrl+Enter でコードを実行できます。
-
-まずは以下のコードを貼り付けて実行し、生成 AI モデルをダウンロードして利用できるようにします。
-[Hugging Face](https://huggingface.co/)では様々なオープンソースのモデルが公開されており、transformers ライブラリから簡単にアクセスすることができます。
-
-```
-!pip install -q transformers==4.51.0 accelerate
-!pip install -q "huggingface-hub>=0.30.0,<1.0" --force-reinstall
-```
-
-
 #### 生成 AI モデルのロード
 
-次に生成 AI モデルのダウンロードを行います。今回の演習では、Alibaba 社の Qwen3-0.6B モデルを利用します。
+[Hugging Face](https://huggingface.co/)では様々なオープンソースのモデルが公開されており、transformers ライブラリから簡単にアクセスすることができます。
+今回の演習では、Alibaba 社の Qwen3-0.6B モデルを利用します。
 Qwen3-0.6B は2025年4月にリリースされた最新の軽量大規模言語モデル（LLM）でQwen3シリーズの最小モデルです。
 以下のコードを実行して、 Qwen3-0.6B をロードします。
 
@@ -209,13 +197,7 @@ print(answer)
 
 #### ベクトル検索
 
-まず以下のコードを実行して、埋め込みモデルを利用するための `sentence-tranformers` をインストールします。
-
-```
-!pip install -q sentence-transformers
-```
-
-次に埋め込みモデルとして多言語に対応した`intfloat/multilingual-e5-small`を利用します。
+埋め込みモデルを利用するための `sentence-tranformers` のライブラリから、埋め込みモデルとして多言語に対応した`intfloat/multilingual-e5-small`を利用します。
 
 ```python
 from sentence_transformers import SentenceTransformer

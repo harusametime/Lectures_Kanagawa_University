@@ -48,6 +48,7 @@ pip install \
     jupyter \
     jupyterlab \
     ipykernel
+python -m ipykernel install --user --name=.venv --display-name "Python (.venv)"
 ```
 
 Jupyter Labを実行します。
@@ -59,7 +60,7 @@ jupyter lab
 ### Jupter Lab での演習
 
 #### 準備
-以下はノートブックを作成しながら演習を行います。
+以下はノートブックを作成しながら演習を行います。まず以下をクリックしてノートブックを開きます。
 
 <kbd><img width="443"  alt="image" src="../images/open_notebook.png"></kbd>
 
@@ -104,10 +105,9 @@ for i in range(100):
 
 #### 形態素解析の導入
 
-形態素解析をして、東京都と京都を見分けられるようにします。以下を実行して形態素解析をインストールして試してみます。
+形態素解析をして、東京都と京都を見分けられるようにします。形態素解析MeCabを試してみます。
 
 ```python
-!pip install mecab-python3==1.0.10 unidic-lite==1.0.8
 
 # 形態素解析の設定
 import MeCab
@@ -134,13 +134,7 @@ for i in range(100):
 
 #### 類似度検索
 
-講義で説明したように BM25 アルゴリズムで類似度検索ができます。まずは以下を実行してライブラリをインストールします。
-
-```python
-!pip install rank_bm25==0.2.2
-```
-
-次に以下を実行して、クエリと全文書との類似度を計算し、類似度トップ5の文書を表示します。
+講義で説明したように BM25 アルゴリズムで類似度検索ができます。次に以下を実行して、クエリと全文書との類似度を計算し、類似度トップ5の文書を表示します。
 途中の query を変更することができます。クエリにあった内容が表示されることを確認しましょう。
 
 ```python
