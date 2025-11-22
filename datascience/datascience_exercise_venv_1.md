@@ -60,6 +60,9 @@ jupyter lab
 
 #### 準備
 以下はノートブックを作成しながら演習を行います。
+
+
+<kbd><img width="443"  alt="image" src="../images/open_notebook.png"></kbd>
 以下のようにコードをコピーペーストして、▶ボタンを押すか、Ctrl+Enter でコードを実行できます。
 
 <kbd><img width="668" height="167" alt="image" src="https://github.com/user-attachments/assets/76571829-c203-4f07-a2a9-ab5a4a379a94" /></kbd>
@@ -67,7 +70,6 @@ jupyter lab
 まずは以下のコードを貼り付けて実行します。日本語の wikipedia のデータをダウンロードします。
 
 ```python
-!pip install --upgrade huggingface_hub==1.0.1
 import pandas as pd
 df = pd.read_json("hf://datasets/llm-book/japanese-wikipedia/ja_wiki.jsonl", nrows=1000, lines=True)
 ```
