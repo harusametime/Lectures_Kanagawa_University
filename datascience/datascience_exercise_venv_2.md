@@ -13,7 +13,8 @@ Python を使った情報検索の基本的な方法を学習します。Mac OS 
 
 まずは Mac のターミナルを開いてください。cmd+space でterminal と打てば検索できると思います。
 
-![alt text](../images/terminal.png)
+
+<kbd><img width="443"  alt="image" src="../images/terminal.png"> </kbd>
 
 まずは演習用のディレクトリを作成します。名前はなんでも構いませんが情報検索 (Information Retrievall; IR) の文字を取って以下のようにしてみます。
 
