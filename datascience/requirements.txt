@@ -1,0 +1,9 @@
+accelerate
+huggingface-hub>=0.30.0,<1.0
+jupyter
+mecab-python3==1.0.10
+pandas
+rank_bm25==0.2.2
+sentence-transformers
+transformers==4.51.0
+unidic-lite==1.0.8
