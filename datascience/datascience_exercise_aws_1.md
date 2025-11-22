@@ -12,7 +12,7 @@ Python を使った情報検索の基本的な方法を学習します。Amazon 
 
 学生が AWS Academy を利用するためにはアカウントを登録する必要があります。教員が受講生をコースに追加すると「コースへの招待」というメールが届くため、それに従って学生はアカウントを登録します。
 
-<img width=400 src="./images/account_creation.png">
+<img width=400 src="../images/account_creation.png">
 
 
 
@@ -21,7 +21,7 @@ Python を使った情報検索の基本的な方法を学習します。Amazon 
 アカウント登録が終わったら、以下のページから AWS Academy へログインします。Student Login を選んでください。
 https://www.awsacademy.com/vforcesite/LMS_Login
 
-<img width=400 border=1 src="./images/login_page.png"> 
+<img width=400 border=1 src="../images/login_page.png"> 
 
 ## コースの選択とモジュールの選択
 
@@ -39,12 +39,12 @@ https://www.awsacademy.com/vforcesite/LMS_Login
 
 初回は同意事項に関するページが表示されますので、一番下までスクロールして I Agree をクリックし、同意してください。
 
-<kbd><img width=600 src="./images/agreement.png"></kbd>
+<kbd><img width=600 src="../images/agreement.png"></kbd>
 
 するとサンドボックスの説明画面が開きます。右上のメニューから Start Lab ボタンをクリックすると、Labをスタートすることができます。ボタンを押すと環境構築中の別画面が開きますが、1-2分たったら閉じて問題ありません。AWS ボタンを押すとAWS コンソールの画面を開くことができます。
 もしAWSボタンを押してもAWSコンソール画面が開かない場合は、まだ環境構築中の可能性があるので、もう少し待ってみます。
 
-<kbd><img width=600 src="./images/start_lab.png"></kbd>
+<kbd><img width=600 src="../images/start_lab.png"></kbd>
 
 ## 演習内容
 
