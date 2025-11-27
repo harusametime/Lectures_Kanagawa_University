@@ -33,9 +33,30 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 pip を最新にして必要なライブラリをいれます。以下をコピペして実行しましょう。
+**Windows Subsystem for Linux (WSL)を使っている方はこのコマンドを使わず、後述の DISPLAY= が冒頭に入ったコマンドを試してください。**
+WSLにissue の報告があります。(['pip install' is extremely slow in WSL2](https://github.com/microsoft/WSL/issues/6643)).
+
 ```shell
 pip install --upgrade pip
 pip install \
+    pandas \
+    mecab-python3==1.0.10 \
+    unidic-lite==1.0.8 \
+    rank_bm25==0.2.2 \
+    transformers==4.51.0 \
+    accelerate \
+    "huggingface-hub>=0.30.0,<1.0" \
+    --force-reinstall \
+    sentence-transformers \
+    jupyter \
+    jupyterlab \
+    ipykernel
+python -m ipykernel install --user --name=.venv --display-name "Python (.venv)"
+```
+WSL2 の場合:
+```shell
+DISPLAY= pip install --upgrade pip
+DISPLAY= pip install \
     pandas \
     mecab-python3==1.0.10 \
     unidic-lite==1.0.8 \
