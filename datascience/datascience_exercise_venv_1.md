@@ -43,11 +43,12 @@ pip install \
     mecab-python3==1.0.10 \
     unidic-lite==1.0.8 \
     rank_bm25==0.2.2 \
-    transformers==4.51.0 \
+    "transformers>=4.55.0,<5.0" \
     accelerate \
-    "huggingface-hub>=0.30.0,<1.0" \
-    --force-reinstall \
+    "huggingface-hub>=0.34.0,<1.0" \
     sentence-transformers \
+    protobuf \
+    sentencepiece \
     jupyter \
     jupyterlab \
     ipykernel
